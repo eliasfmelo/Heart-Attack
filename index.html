@@ -83,7 +83,7 @@
                     <span class="status-dot"></span>
 
                     <span>
-                        Modo demonstrativo
+                        Base de dados conectada
                     </span>
 
                 </div>
@@ -139,6 +139,14 @@
                     >
 
                     <button
+                        class="real-btn"
+                        id="realDbBtn">
+
+                        Base Completa (8.763)
+
+                    </button>
+
+                    <button
                         class="demo-btn"
                         id="demoBtn">
 
@@ -151,29 +159,22 @@
             </header>
 
 
-            <!-- AVISO -->
+            <!-- AVISO / STATUS DA BASE -->
 
             <section
-                class="notice"
+                class="notice success"
                 id="notice">
 
-                <span>
-                    i
+                <span id="noticeIcon">
+                    ✓
                 </span>
 
-                <div>
+                <div id="noticeContent">
 
-                    <strong>Importante:</strong>
+                    <strong>Base de Dados Integrada:</strong>
 
-                    O arquivo CSV utilizado atualmente contém
-                    as colunas da base, mas não possui registros
-                    preenchidos.
-
-                    Por isso o dashboard inicia utilizando
-                    <b>dados demonstrativos</b>.
-
-                    Quando você carregar um CSV preenchido,
-                    os gráficos serão atualizados automaticamente.
+                    A base oficial <b>Heart Attack Prediction Dataset</b> está conectada com
+                    <b>8.763 registros reais</b> de pacientes, alimentando todos os indicadores estatísticos e clínicos do projeto de IA.
 
                 </div>
 
@@ -208,13 +209,13 @@
                         </span>
 
                         <strong id="mPatients">
-                            12
+                            8.763
                         </strong>
 
                     </div>
 
                     <small id="mPatientsDelta">
-                        amostra demonstrativa
+                        base oficial de IA
                     </small>
 
                 </article>
@@ -235,7 +236,7 @@
                         </span>
 
                         <strong id="mAge">
-                            51,3
+                            53,7
                             <em>anos</em>
                         </strong>
 
@@ -263,7 +264,7 @@
                         </span>
 
                         <strong id="mChol">
-                            221
+                            260
                             <em>mg/dL</em>
                         </strong>
 
@@ -291,7 +292,7 @@
                         </span>
 
                         <strong id="mHeart">
-                            76
+                            75
                             <em>bpm</em>
                         </strong>
 
@@ -378,7 +379,7 @@
                             <div class="donut-center">
 
                                 <strong id="sexTotal">
-                                    12
+                                    8.763
                                 </strong>
 
                                 <span>
@@ -477,7 +478,7 @@
                             </div>
 
                             <strong id="cChol">
-                                221
+                                260
                                 <small>mg/dL</small>
                             </strong>
 
@@ -485,7 +486,7 @@
 
                                 <i
                                     id="pChol"
-                                    style="width:73%">
+                                    style="width:86%">
                                 </i>
 
                             </div>
@@ -507,7 +508,7 @@
 
                             <strong id="cPressure">
 
-                                132
+                                135
 
                                 <small>
                                     mmHg
@@ -519,7 +520,7 @@
 
                                 <i
                                     id="pPressure"
-                                    style="width:66%">
+                                    style="width:68%">
                                 </i>
 
                             </div>
@@ -541,7 +542,7 @@
 
                             <strong id="cHeart">
 
-                                76
+                                75
 
                                 <small>
                                     bpm
@@ -572,13 +573,33 @@
                             </span>
 
                             <strong id="modifiable">
-                                41%
+                                68%
                             </strong>
 
                         </div>
 
                         <span class="risk-caption">
                             diabetes + tabagismo + obesidade
+                        </span>
+
+                    </div>
+
+                    <div class="risk-summary" style="margin-top:10px; padding-top:10px;">
+
+                        <div>
+
+                            <span>
+                                Risco de Infarto (IA)
+                            </span>
+
+                            <strong id="aiRisk" style="color:var(--red);">
+                                35,8%
+                            </strong>
+
+                        </div>
+
+                        <span class="risk-caption" id="aiRiskCaption">
+                            casos positivos na base
                         </span>
 
                     </div>
@@ -593,7 +614,7 @@
             <footer>
 
                 <span>
-                    HeartGuard • Projeto de Análise e Desenvolvimento de Sistemas
+                    HeartGuard • Projeto de Análise e Desenvolvimento de Sistemas / Inteligência Artificial
                 </span>
 
                 <span>
@@ -607,7 +628,9 @@
     </div>
 
 
-    <!-- JavaScript -->
+    <!-- JavaScript: Base de Dados Integrada e Lógica -->
+
+    <script src="database.js"></script>
 
     <script src="script.js"></script>
 
