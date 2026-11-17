@@ -768,3 +768,101 @@ $("closeNotice").addEventListener("click", () => {
 ===================================================== */
 
 loadRealDatabase();
+
+
+/* =====================================================
+   INTERAÇÃO COM O SIMULADOR DE IA
+===================================================== */
+
+function runSimulation() {
+    if (typeof window.predictHeartRisk !== "function") {
+        console.warn("Função predictHeartRisk ainda não carregada.");
+        return;
+    }
+
+    const patient = {
+        Age: parseNumber($("simAge").value) || 50,
+        Sex: $("simSex").value,
+        Cholesterol: parseNumber($("simChol").value) || 220,
+        Systolic: parseNumber($("simSystolic").value) || 120,
+        Diastolic: 80,
+        HeartRate: parseNumber($("simHeart").value) || 75,
+        Triglycerides: parseNumber($("simTrig").value) || 250,
+        Smoking: $("simSmoking").value,
+        Diabetes: $("simDiabetes").value,
+        Obesity: $("simObesity").value,
+        FamilyHistory: $("simFamHist").value,
+        Stress: parseNumber($("simStress").value) || 5,
+        ExerciseHours: parseNumber($("simExercise").value) || 3.0
+    };
+
+    const result = window.predictHeartRisk(patient);
+    if (!result) return;
+
+    // Atualiza percentual e cor
+    const pctEl = $("resPercentage");
+    pctEl.textContent = result.percentage + "%";
+    pctEl.style.color = result.color;
+
+    // Atualiza badge
+    const badgeEl = $("resBadge");
+    badgeEl.textContent = result.level;
+    badgeEl.style.color = result.color;
+    badgeEl.style.background = result.level.includes("Alto") 
+        ? "rgba(255,110,121,.2)" 
+        : (result.level.includes("Moderado") ? "rgba(255,180,91,.2)" : "rgba(66,214,163,.2)");
+
+    // Atualiza fatores críticos
+    const factorsEl = $("resFactors");
+    if (result.factors.length > 0) {
+        factorsEl.innerHTML = result.factors.map(function(f) {
+            return `<span class="factor-tag">${f}</span>`;
+        }).join("");
+    } else {
+        factorsEl.innerHTML = '<span class="factor-tag" style="background:rgba(66,214,163,.15); color:var(--green); border-color:rgba(66,214,163,.3);">Nenhum fator de alto risco identificado</span>';
+    }
+}
+
+// Event listeners do simulador
+if ($("btnPredict")) {
+    $("btnPredict").addEventListener("click", runSimulation);
+}
+
+if ($("btnPresetHealthy")) {
+    $("btnPresetHealthy").addEventListener("click", function() {
+        $("simAge").value = 32;
+        $("simSex").value = "Female";
+        $("simChol").value = 175;
+        $("simSystolic").value = 115;
+        $("simHeart").value = 68;
+        $("simTrig").value = 120;
+        $("simSmoking").value = "0";
+        $("simDiabetes").value = "0";
+        $("simObesity").value = "0";
+        $("simFamHist").value = "0";
+        $("simStress").value = 3;
+        $("simExercise").value = 6.0;
+        runSimulation();
+    });
+}
+
+if ($("btnPresetRisk")) {
+    $("btnPresetRisk").addEventListener("click", function() {
+        $("simAge").value = 67;
+        $("simSex").value = "Male";
+        $("simChol").value = 285;
+        $("simSystolic").value = 158;
+        $("simHeart").value = 88;
+        $("simTrig").value = 460;
+        $("simSmoking").value = "1";
+        $("simDiabetes").value = "1";
+        $("simObesity").value = "1";
+        $("simFamHist").value = "1";
+        $("simStress").value = 9;
+        $("simExercise").value = 1.0;
+        runSimulation();
+    });
+}
+
+// Executa uma simulação inicial após carregamento completo
+setTimeout(runSimulation, 400);

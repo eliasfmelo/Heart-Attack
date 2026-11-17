@@ -61,6 +61,11 @@
                     <span>Indicadores</span>
                 </a>
 
+                <a href="#simulador">
+                    ⚡
+                    <span>Simulador de IA</span>
+                </a>
+
             </nav>
 
             <div class="sidebar-bottom">
@@ -72,8 +77,8 @@
                     </span>
 
                     <p>
-                        Dashboard para análise dos principais
-                        fatores associados ao risco cardiovascular.
+                        Dashboard e Modelo de IA (Random Forest + StandardScaler)
+                        para análise de risco cardiovascular.
                     </p>
 
                 </div>
@@ -106,7 +111,7 @@
                 <div>
 
                     <span class="eyebrow">
-                        ANÁLISE DE DADOS
+                        INTELIGÊNCIA ARTIFICIAL APLICADA
                     </span>
 
                     <h1>
@@ -114,8 +119,8 @@
                     </h1>
 
                     <p>
-                        Visualização dos principais fatores selecionados
-                        para o projeto de Inteligência Artificial.
+                        Visualização e predição dos principais fatores clínicos
+                        baseados na base Heart Attack Prediction Dataset.
                     </p>
 
                 </div>
@@ -123,8 +128,12 @@
 
                 <div class="actions">
 
+                    <a href="#simulador" class="upload-btn" style="text-decoration:none; display:inline-flex; align-items:center;">
+                        ⚡ Testar Simulador de IA
+                    </a>
+
                     <label
-                        class="upload-btn"
+                        class="demo-btn"
                         for="csvInput">
 
                         ＋ Carregar CSV
@@ -171,10 +180,9 @@
 
                 <div id="noticeContent">
 
-                    <strong>Base de Dados Integrada:</strong>
+                    <strong>Base de Dados e Modelos Integrados:</strong>
 
-                    A base oficial <b>Heart Attack Prediction Dataset</b> está conectada com
-                    <b>8.763 registros reais</b> de pacientes, alimentando todos os indicadores estatísticos e clínicos do projeto de IA.
+                    A base oficial <b>Heart Attack Prediction Dataset (8.763 registros)</b>, o <b>StandardScaler</b> e o modelo <b>Random Forest</b> treinado estão conectados e operando em tempo real.
 
                 </div>
 
@@ -609,6 +617,165 @@
             </section>
 
 
+            <!-- =========================
+                 SIMULADOR PREDITIVO DE IA
+            ========================== -->
+
+            <section class="simulator-panel" id="simulador">
+
+                <div class="panel-head">
+
+                    <div>
+
+                        <span class="panel-kicker">MODELO DE MACHINE LEARNING</span>
+
+                        <h2>Simulador de Risco Cardíaco em Tempo Real</h2>
+
+                        <p style="color:var(--muted); font-size:11px; margin-top:3px;">
+                            Avalie o risco cardiovascular de um paciente utilizando o <b>StandardScaler</b> e o modelo <b>Random Forest (100 árvores)</b> integrados diretamente no navegador.
+                        </p>
+
+                    </div>
+
+                    <span class="tag">IA • Random Forest</span>
+
+                </div>
+
+                <div class="sim-grid">
+
+                    <!-- FORMULÁRIO -->
+
+                    <form class="sim-form" id="simForm" onsubmit="return false;">
+
+                        <div class="form-group">
+                            <label for="simAge">Idade (anos)</label>
+                            <input type="number" id="simAge" class="form-control" value="55" min="18" max="100">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simSex">Sexo Biológico</label>
+                            <select id="simSex" class="form-control">
+                                <option value="Male" selected>Masculino</option>
+                                <option value="Female">Feminino</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simChol">Colesterol Total (mg/dL)</label>
+                            <input type="number" id="simChol" class="form-control" value="245" min="100" max="450">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simSystolic">Pressão Sistólica (mmHg)</label>
+                            <input type="number" id="simSystolic" class="form-control" value="142" min="80" max="220">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simHeart">Frequência Cardíaca (bpm)</label>
+                            <input type="number" id="simHeart" class="form-control" value="78" min="40" max="180">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simTrig">Triglicerídeos (mg/dL)</label>
+                            <input type="number" id="simTrig" class="form-control" value="380" min="50" max="800">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simSmoking">Tabagismo</label>
+                            <select id="simSmoking" class="form-control">
+                                <option value="1" selected>Sim (Fumante)</option>
+                                <option value="0">Não (Não fumante)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simDiabetes">Diabetes</label>
+                            <select id="simDiabetes" class="form-control">
+                                <option value="1" selected>Sim (Diabético)</option>
+                                <option value="0">Não</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simObesity">Obesidade</label>
+                            <select id="simObesity" class="form-control">
+                                <option value="1" selected>Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simFamHist">Histórico Familiar</label>
+                            <select id="simFamHist" class="form-control">
+                                <option value="1" selected>Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simStress">Nível de Estresse (1-10)</label>
+                            <input type="number" id="simStress" class="form-control" value="7" min="1" max="10">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="simExercise">Exercício Semanal (horas)</label>
+                            <input type="number" id="simExercise" class="form-control" value="2.5" min="0" max="30" step="0.5">
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="predict-btn" id="btnPredict">
+                                ⚡ Calcular Risco com IA
+                            </button>
+                            <button type="button" class="preset-btn" id="btnPresetHealthy">
+                                Exemplo: Baixo Risco
+                            </button>
+                            <button type="button" class="preset-btn" id="btnPresetRisk">
+                                Exemplo: Alto Risco
+                            </button>
+                        </div>
+
+                    </form>
+
+
+                    <!-- PAINEL DE RESULTADO -->
+
+                    <div class="sim-result">
+
+                        <div>
+
+                            <div class="result-header">
+                                <span style="font-size:10px; color:var(--muted); font-weight:700;">PREDIÇÃO DO MODELO</span>
+                                <span class="result-badge" id="resBadge" style="background:rgba(255,110,121,.2); color:var(--red);">Alto Risco</span>
+                            </div>
+
+                            <div class="gauge-display">
+                                <div class="gauge-val" id="resPercentage" style="color:var(--red);">64.8%</div>
+                                <div class="gauge-caption" id="resCaption">Probabilidade estimada de evento cardiovascular</div>
+                            </div>
+
+                            <div style="font-size:9px; color:var(--muted); line-height:1.5; margin-top:8px;">
+                                Normalização executada via <b>StandardScaler</b> e classificação inferida pelo modelo <b>Random Forest</b> treinado.
+                            </div>
+
+                        </div>
+
+                        <div class="factors-box">
+                            <h4>Fatores Críticos Detectados</h4>
+                            <div id="resFactors">
+                                <span class="factor-tag">Colesterol elevado (245 mg/dL)</span>
+                                <span class="factor-tag">Pressão sistólica alta (142 mmHg)</span>
+                                <span class="factor-tag">Tabagismo ativo</span>
+                                <span class="factor-tag">Diabetes diagnosticado</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
             <!-- RODAPÉ -->
 
             <footer>
@@ -628,9 +795,11 @@
     </div>
 
 
-    <!-- JavaScript: Base de Dados Integrada e Lógica -->
+    <!-- JavaScript: Base de Dados, Modelo de IA e Lógica -->
 
     <script src="database.js"></script>
+
+    <script src="model.js"></script>
 
     <script src="script.js"></script>
 
