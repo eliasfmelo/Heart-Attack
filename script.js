@@ -170,93 +170,34 @@ let cachedRealData = null;
 const $ = (id) => document.getElementById(id);
 
 /* =====================================================
-   MÉDIA
+   MÉDIA — compartilhada com analytics.js
 ===================================================== */
 
-const avg = (arr) => {
-    if (!arr.length) return 0;
-    return arr.reduce((a, b) => a + b, 0) / arr.length;
-};
+const avg = window.HeartGuardAnalytics.avg;
 
-/* =====================================================
-   NORMALIZAÇÃO DE CHAVES E COLUNAS
-===================================================== */
+/* NORMALIZAÇÃO DE CHAVES — compartilhada com analytics.js */
 
-function normalizeKey(key) {
-    return String(key ?? "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]/g, "");
-}
+const normalizeKey = window.HeartGuardAnalytics.normalizeKey;
 
-function getValue(row, names) {
-    const keys = Object.keys(row);
-    const wanted = names.map(normalizeKey);
-    const key = keys.find(k => wanted.includes(normalizeKey(k)));
-    return key ? row[key] : "";
-}
+/* BUSCA DE VALORES — compartilhada com analytics.js */
 
-function parseNumber(value) {
-    if (value === null || value === undefined || value === "") {
-        return NaN;
-    }
-    const n = Number(
-        String(value)
-            .replace(",", ".")
-            .replace(/[^\d.-]/g, "")
-    );
-    return Number.isFinite(n) ? n : NaN;
-}
+const getValue = window.HeartGuardAnalytics.getValue;
 
-function yes(value) {
-    const v = String(value ?? "").trim().toLowerCase();
-    return ["yes", "sim", "1", "true", "y"].includes(v);
-}
+/* CONVERSÃO NUMÉRICA — compartilhada com analytics.js */
 
-function parsePressure(value) {
-    const match = String(value ?? "").match(/\d+(?:[.,]\d+)?/);
-    return match ? parseNumber(match[0]) : NaN;
-}
+const parseNumber = window.HeartGuardAnalytics.parseNumber;
 
-/* =====================================================
-   NORMALIZA OS DADOS DA BASE
-===================================================== */
+/* INTERPRETAÇÃO DE VALORES AFIRMATIVOS — compartilhada */
 
-function normalizeRows(rows) {
-    return rows.map(r => ({
-        Age: parseNumber(
-            getValue(r, ["Age", "Idade"])
-        ),
-        Sex: getValue(r, ["Sex", "Sexo"]),
-        Cholesterol: parseNumber(
-            getValue(r, ["Cholesterol", "Colesterol"])
-        ),
-        BloodPressure: getValue(
-            r,
-            ["Blood Pressure", "BloodPressure", "Pressão arterial", "Pressao arterial"]
-        ),
-        HeartRate: parseNumber(
-            getValue(r, ["Heart Rate", "HeartRate", "Frequência cardíaca", "Frequencia cardiaca"])
-        ),
-        Diabetes: getValue(r, ["Diabetes"]),
-        FamilyHistory: getValue(
-            r,
-            ["Family History", "Historico familiar", "Histórico familiar"]
-        ),
-        Smoking: getValue(r, ["Smoking", "Tabagismo"]),
-        Obesity: getValue(r, ["Obesity", "Obesidade"]),
-        HeartAttackRisk: getValue(
-            r,
-            ["Heart Attack Risk", "HeartAttackRisk", "Risco de Ataque Cardíaco", "Risco", "Heart Attack"]
-        )
-    })).filter(
-        r =>
-            Object.values(r).some(
-                v => v !== "" && (Number.isFinite(v) || yes(v) || (typeof v === "string" && v.trim().length > 0))
-            )
-    );
-}
+const yes = window.HeartGuardAnalytics.yes;
+
+/* EXTRAÇÃO DE PRESSÃO — compartilhada com analytics.js */
+
+const parsePressure = window.HeartGuardAnalytics.parsePressure;
+
+/* NORMALIZA OS DADOS DA BASE — compartilhada com analytics.js */
+
+const normalizeRows = window.HeartGuardAnalytics.normalizeRows;
 
 /* =====================================================
    FORMATAÇÃO DE NÚMEROS
@@ -646,47 +587,9 @@ function loadData(rows, mode = "real") {
    LEITOR DE CSV ROBUSTO
 ===================================================== */
 
-function parseCSV(text) {
-    if (!text || typeof text !== "string") return [];
+/* LEITURA DE CSV — compartilhada com analytics.js */
 
-    const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
-    if (lines.length < 2) return [];
-
-    const delimiter = lines[0].includes(";") ? ";" : ",";
-
-    const headers = lines[0].split(delimiter).map(h =>
-        h.trim().replace(/^"|"$/g, "")
-    );
-
-    const rows = [];
-    for (let l = 1; l < lines.length; l++) {
-        const line = lines[l];
-        const values = [];
-        let current = "";
-        let quoted = false;
-
-        for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-                quoted = !quoted;
-            } else if (char === delimiter && !quoted) {
-                values.push(current.trim().replace(/^"|"$/g, ""));
-                current = "";
-            } else {
-                current += char;
-            }
-        }
-        values.push(current.trim().replace(/^"|"$/g, ""));
-
-        const row = {};
-        for (let i = 0; i < headers.length; i++) {
-            row[headers[i]] = values[i] ?? "";
-        }
-        rows.push(row);
-    }
-
-    return rows;
-}
+const parseCSV = window.HeartGuardAnalytics.parseCSV;
 
 /* =====================================================
    CARREGA BASE DE DADOS COMPLETA
