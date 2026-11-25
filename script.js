@@ -683,8 +683,15 @@ function runSimulation() {
         return;
     }
 
+    const age = Number($("simAge").value);
+
+    if (!Number.isInteger(age) || age < 18 || age > 100) {
+        console.warn("Idade inválida. Informe uma idade entre 18 e 100.");
+        return;
+    }
+
     const patient = {
-        Age: parseNumber($("simAge").value) || 50,
+       Age: age,
         Sex: $("simSex").value,
         Cholesterol: parseNumber($("simChol").value) || 220,
         Systolic: parseNumber($("simSystolic").value) || 120,
@@ -695,8 +702,12 @@ function runSimulation() {
         Diabetes: $("simDiabetes").value,
         Obesity: $("simObesity").value,
         FamilyHistory: $("simFamHist").value,
-        Stress: parseNumber($("simStress").value) || 5,
-        ExerciseHours: parseNumber($("simExercise").value) || 3.0
+        Stress: $("simStress").value === ""
+  ? 5
+  : parseNumber($("simStress").value),
+       ExerciseHours: $("simExercise").value === "" 
+  ? 3.0 
+  : parseNumber($("simExercise").value)
     };
 
     const result = window.predictHeartRisk(patient);

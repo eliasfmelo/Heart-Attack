@@ -69,3 +69,158 @@ test('07 - Preset de risco identifica os fatores críticos', async ({ page }) =>
   await expect(fatores).toContainText('Histórico familiar cardiovascular');
   await expect(fatores).toContainText('Alto nível de estresse');
 });
+
+test('08 - Simulador aplica valores padrão quando campos numéricos estão vazios', async ({ page }) => {
+  await page.goto(caminho);
+
+  // Simula o modelo recebendo o paciente e devolvendo um resultado
+  await page.evaluate(() => {
+    window.__pacienteCapturado = null;
+
+    window.predictHeartRisk = (patient) => {
+      window.__pacienteCapturado = patient;
+
+      return {
+        percentage: '10.0',
+        level: 'Baixo Risco',
+        color: 'green',
+        factors: []
+      };
+    };
+
+    // Limpa os campos numéricos do simulador
+    [
+      'simChol',
+      'simSystolic',
+      'simHeart',
+      'simTrig',
+      'simStress',
+      'simExercise'
+    ].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+  });
+
+  // Executa a previsão
+  await page.locator('#btnPredict').click();
+
+  // Recupera os dados enviados para o modelo
+  const patient = await page.evaluate(() => window.__pacienteCapturado);
+
+  // Verifica os valores padrão
+  expect(patient.Age).toBe(55);
+  expect(patient.Cholesterol).toBe(220);
+  expect(patient.Systolic).toBe(120);
+  expect(patient.HeartRate).toBe(75);
+  expect(patient.Triglycerides).toBe(250);
+  expect(patient.Stress).toBe(5);
+  expect(patient.ExerciseHours).toBe(3.0);
+});
+
+test('09 - Simulador preserva zero horas de exercício', async ({ page }) => {
+  await page.goto(caminho);
+
+  await page.evaluate(() => {
+    window.__pacienteCapturado = null;
+
+    window.predictHeartRisk = (patient) => {
+      window.__pacienteCapturado = patient;
+
+      return {
+        percentage: '10.0',
+        level: 'Baixo Risco',
+        color: 'green',
+        factors: []
+      };
+    };
+
+    document.getElementById('simExercise').value = '0';
+  });
+
+  await page.locator('#btnPredict').click();
+
+  const patient = await page.evaluate(() => window.__pacienteCapturado);
+
+  expect(patient.ExerciseHours).toBe(0);
+});
+
+test('10 - Simulador preserva zero de estresse', async ({ page }) => {
+  await page.goto(caminho);
+
+  await page.evaluate(() => {
+    window.__pacienteCapturado = null;
+
+    window.predictHeartRisk = (patient) => {
+      window.__pacienteCapturado = patient;
+
+      return {
+        percentage: '10.0',
+        level: 'Baixo Risco',
+        color: 'green',
+        factors: []
+      };
+    };
+
+    document.getElementById('simStress').value = '0';
+  });
+
+  await page.locator('#btnPredict').click();
+
+  const patient = await page.evaluate(() => window.__pacienteCapturado);
+
+  expect(patient.Stress).toBe(0);
+});
+
+test('11 - Simulador rejeita idade abaixo do mínimo', async ({ page }) => {
+  await page.goto(caminho);
+
+  await page.evaluate(() => {
+    window.__predicaoExecutada = false;
+
+    window.predictHeartRisk = (patient) => {
+      window.__predicaoExecutada = true;
+
+      return {
+        percentage: '10.0',
+        level: 'Baixo Risco',
+        color: 'green',
+        factors: []
+      };
+    };
+
+    document.getElementById('simAge').value = '17';
+  });
+
+  await page.locator('#btnPredict').click();
+
+  const executou = await page.evaluate(() => window.__predicaoExecutada);
+
+  expect(executou, 'Não deveria executar a predição com idade abaixo de 18').toBe(false);
+});
+
+test('12 - Simulador rejeita idade acima do máximo', async ({ page }) => {
+  await page.goto(caminho);
+
+  await page.evaluate(() => {
+    window.__predicaoExecutada = false;
+
+    window.predictHeartRisk = () => {
+      window.__predicaoExecutada = true;
+
+      return {
+        percentage: '10.0',
+        level: 'Baixo Risco',
+        color: 'green',
+        factors: []
+      };
+    };
+
+    document.getElementById('simAge').value = '101';
+  });
+
+  await page.locator('#btnPredict').click();
+
+  const executou = await page.evaluate(() => window.__predicaoExecutada);
+
+  expect(executou, 'Não deveria executar a predição com idade acima de 100').toBe(false);
+});
