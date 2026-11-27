@@ -1,3 +1,22 @@
 node_modules/
 test-results/
 playwright-report/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# VS Code
+.vscode/
+
+# Sistema
+Thumbs.db
+.DS_Store

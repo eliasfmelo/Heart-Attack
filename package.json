@@ -1,4 +1,14 @@
 {
+  "name": "heart-attack",
+  "version": "1.0.0",
+  "description": "HeartGuard - Sistema de Predição de Risco Cardíaco",
+  "scripts": {
+    "test": "node --test",
+    "test:unit": "node --test tests/unit",
+    "test:integration": "node --test tests/integration",
+    "test:system": "playwright test",
+    "test:all": "node --test && playwright test"
+  },
   "devDependencies": {
     "@playwright/test": "^1.65.1"
   }
